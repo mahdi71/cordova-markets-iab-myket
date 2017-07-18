@@ -4,7 +4,7 @@ module.exports = {
         cordova.exec(
 			function (result) {
 				console.log(result);
-				alert(result);
+				alert(JSON.stringify(result));
 			},
 			function (error) {
 				console.log(error);
@@ -20,7 +20,7 @@ module.exports = {
         cordova.exec(
 			function (result) {
 				console.log(result);
-				alert(result);
+				alert(JSON.stringify(result));
 			},
 			function (error) {
 				console.log(error);
@@ -36,7 +36,7 @@ module.exports = {
         cordova.exec(
 			function (result) {
 				console.log(result);
-				alert(result);
+				alert(JSON.stringify(result));
 			},
 			function (error) {
 				console.log(error);
@@ -52,7 +52,7 @@ module.exports = {
         cordova.exec(
 			function (result) {
 				console.log(result);
-				alert(result);
+				alert(JSON.stringify(result));
 			},
 			function (error) {
 				console.log(error);
