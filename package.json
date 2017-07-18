@@ -1,0 +1,39 @@
+{
+  "name": "cordova-markets-iab",
+  "version": "1.0.0",
+  "description": "Show Adad Banner and Interstitial Ad",
+  "cordova": {
+    "id": "cordova-markets-iab",
+    "platforms": [
+      "android"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miladesign/cordova-markets-iab.git"
+  },
+  "keywords": [
+    "cordova",
+    "plugin",
+    "ad",
+    "adad",
+    "monetisation",
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+"devDependencies": {
+    "cordova": ">=3.0.0"
+  },
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "author": "Milad Mohammadi",
+  "license": "MilaDesign",
+  "bugs": {
+    "url": "https://github.com/miladesign/cordova-markets-iab/issues"
+  },
+  "homepage": "https://github.com/miladesign/cordova-markets-iab#readme"
+}
