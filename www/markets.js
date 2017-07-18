@@ -4,9 +4,11 @@ module.exports = {
         cordova.exec(
 			function (result) {
 				console.log(result);
+				alert(result);
 			},
 			function (error) {
 				console.log(error);
+				alert(error);
 			},
             'MdMarketsIAB',
             'Initialize',
@@ -18,9 +20,11 @@ module.exports = {
         cordova.exec(
 			function (result) {
 				console.log(result);
+				alert(result);
 			},
 			function (error) {
 				console.log(error);
+				alert(error);
 			},
             'MdMarketsIAB',
             'GetOwnedProducts',
@@ -32,9 +36,11 @@ module.exports = {
         cordova.exec(
 			function (result) {
 				console.log(result);
+				alert(result);
 			},
 			function (error) {
 				console.log(error);
+				alert(error);
 			},
             'MdMarketsIAB',
             'RequestPayment',
@@ -46,9 +52,11 @@ module.exports = {
         cordova.exec(
 			function (result) {
 				console.log(result);
+				alert(result);
 			},
 			function (error) {
 				console.log(error);
+				alert(error);
 			},
             'MdMarketsIAB',
             'ConsumeProduct',
