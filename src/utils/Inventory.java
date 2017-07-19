@@ -60,7 +60,7 @@ public class Inventory {
         return result;
     }
 
-    List < MdMarketsIAB.Prchase > getAllPurchases() {
+    public List < MdMarketsIAB.Prchase > getAllPurchases() {
         return new ArrayList < MdMarketsIAB.Prchase > (this.mPurchaseMap.values());
     }
 

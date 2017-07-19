@@ -75,91 +75,91 @@ public class IabHelper {
     OnIabPurchaseFinishedListener mPurchaseListener;
 
     public IabHelper(Context ctx, String base64PublicKey, int Market) {
-        this.mContext = ctx.getApplicationContext();
-        this.mSignatureBase64 = base64PublicKey;
+        mContext = ctx.getApplicationContext();
+        mSignatureBase64 = base64PublicKey;
         switch(Market) {
             case 0:
-                this.mServiceName = "ir.cafebazaar.pardakht.InAppBillingService.BIND";
-                this.mPackageName = "com.farsitel.bazaar";
+                mServiceName = "ir.cafebazaar.pardakht.InAppBillingService.BIND";
+                mPackageName = "com.farsitel.bazaar";
                 break;
             case 1:
-                this.mServiceName = "ir.mservices.market.InAppBillingService.BIND";
-                this.mPackageName = "ir.mservices.market";
+                mServiceName = "ir.mservices.market.InAppBillingService.BIND";
+                mPackageName = "ir.mservices.market";
                 break;
             case 2:
-                this.mServiceName = "ir.tgbs.iranapps.billing.InAppBillingService.BIND";
-                this.mPackageName = "ir.tgbs.android.iranapp";
+                mServiceName = "ir.tgbs.iranapps.billing.InAppBillingService.BIND";
+                mPackageName = "ir.tgbs.android.iranapp";
                 break;
             case 3:
-                this.mServiceName = "net.jhoobin.jhub.InAppBillingService.BIND";
-                this.mPackageName = "net.jhoobin.jhub";
+                mServiceName = "net.jhoobin.jhub.InAppBillingService.BIND";
+                mPackageName = "net.jhoobin.jhub";
                 break;
             case 4:
-                this.mServiceName = "com.ada.market.service.payment.BIND";
-                this.mPackageName = "com.ada.market";
+                mServiceName = "com.ada.market.service.payment.BIND";
+                mPackageName = "com.ada.market";
                 break;
             case 5:
-                this.mServiceName = "com.hrm.android.market.billing.InAppBillingService.BIND";
-                this.mPackageName = "com.hrm.android.market";
+                mServiceName = "com.hrm.android.market.billing.InAppBillingService.BIND";
+                mPackageName = "com.hrm.android.market";
                 break;
             case 6:
-                this.mServiceName = "com.android.vending.billing.InAppBillingService.BIND";
-                this.mPackageName = "com.android.vending";
+                mServiceName = "com.android.vending.billing.InAppBillingService.BIND";
+                mPackageName = "com.android.vending";
                 break;
             default:
-                this.mServiceName = "ir.cafebazaar.pardakht.InAppBillingService.BIND";
-                this.mPackageName = "com.farsitel.bazaar";
+                mServiceName = "ir.cafebazaar.pardakht.InAppBillingService.BIND";
+                mPackageName = "com.farsitel.bazaar";
                 break;
         }
         logDebug("IAB helper created.");
     }
 
     public void enableDebugLogging(boolean enable, String tag) {
-        this.mDebugLog = enable;
-        this.mDebugTag = tag;
+        mDebugLog = enable;
+        mDebugTag = tag;
     }
 
     public void enableDebugLogging(boolean enable) {
-        this.mDebugLog = enable;
+        mDebugLog = enable;
     }
 
     public void startSetup(final OnIabSetupFinishedListener listener) {
-        if (this.mSetupDone) {
+        if (mSetupDone) {
             throw new IllegalStateException("IAB helper is already set up.");
         }
         logDebug("Starting in-app billing setup.");
-        this.mServiceConn = new ServiceConnection() {
+        mServiceConn = new ServiceConnection() {
             public void onServiceDisconnected(ComponentName name) {
-                IabHelper.this.logDebug("Billing service disconnected.");
-                IabHelper.this.mService = null;
+                logDebug("Billing service disconnected.");
+                mService = null;
             }
 
             public void onServiceConnected(ComponentName name, IBinder service) {
-                IabHelper.this.logDebug("Billing service connected.");
-                IabHelper.this.mService = IInAppBillingService.Stub.asInterface(service);
-                String packageName = IabHelper.this.mContext.getPackageName();
+                logDebug("Billing service connected.");
+                mService = IInAppBillingService.Stub.asInterface(service);
+                String packageName = mContext.getPackageName();
                 try {
-                    IabHelper.this.logDebug("Checking for in-app billing 3 support.");
+                    logDebug("Checking for in-app billing 3 support.");
 
-                    int response = IabHelper.this.mService.isBillingSupported(3, packageName, "inapp");
+                    int response = mService.isBillingSupported(3, packageName, ITEM_TYPE_INAPP);
                     if (response != 0) {
                         if (listener != null) {
                             listener.onIabSetupFinished(new IabResult(response,
                                 "Error checking for billing v3 support."));
                         }
-                        IabHelper.this.mSubscriptionsSupported = false;
+                        mSubscriptionsSupported = false;
                         return;
                     }
-                    IabHelper.this.logDebug("In-app billing version 3 supported for " + packageName);
+                    logDebug("In-app billing version 3 supported for " + packageName);
 
-                    response = IabHelper.this.mService.isBillingSupported(3, packageName, "subs");
+                    response = mService.isBillingSupported(3, packageName, ITEM_TYPE_SUBS);
                     if (response == 0) {
-                        IabHelper.this.logDebug("Subscriptions AVAILABLE.");
-                        IabHelper.this.mSubscriptionsSupported = true;
+                        logDebug("Subscriptions AVAILABLE.");
+                        mSubscriptionsSupported = true;
                     } else {
-                        IabHelper.this.logDebug("Subscriptions NOT AVAILABLE. Response: " + response);
+                        logDebug("Subscriptions NOT AVAILABLE. Response: " + response);
                     }
-                    IabHelper.this.mSetupDone = true;
+                    mSetupDone = true;
                 } catch (RemoteException e) {
                     if (listener != null) {
                         listener.onIabSetupFinished(new IabResult(-1001,
@@ -172,12 +172,12 @@ public class IabHelper {
                     listener.onIabSetupFinished(new IabResult(0, "Setup successful."));
             }
         };
-        Intent serviceIntent = new Intent(this.mServiceName);
-        serviceIntent.setPackage(this.mPackageName);
+        Intent serviceIntent = new Intent(mServiceName);
+        serviceIntent.setPackage(mPackageName);
         PackageManager pm=mContext.getPackageManager();
         List<ResolveInfo> intentServices = pm.queryIntentServices(serviceIntent, 0);
         if (intentServices != null && !intentServices.isEmpty()) {
-            this.mContext.bindService(serviceIntent, this.mServiceConn, 1);
+            mContext.bindService(serviceIntent, mServiceConn, 1);
         } else if (listener != null) {
             listener.onIabSetupFinished(new IabResult(3, "Billing service unavailable on device."));
         }
@@ -185,26 +185,26 @@ public class IabHelper {
 
     public void dispose() {
         logDebug("Disposing.");
-        this.mSetupDone = false;
-        if (this.mServiceConn != null) {
+        mSetupDone = false;
+        if (mServiceConn != null) {
             logDebug("Unbinding from service.");
             if (mContext != null && mService!=null) {
-                this.mContext.unbindService(this.mServiceConn);
+                mContext.unbindService(mServiceConn);
             }
-            this.mServiceConn = null;
-            this.mService = null;
-            this.mPurchaseListener = null;
+            mServiceConn = null;
+            mService = null;
+            mPurchaseListener = null;
         }
     }
 
     public boolean subscriptionsSupported() {
-        return this.mSubscriptionsSupported;
+        return mSubscriptionsSupported;
     }
 
     public void launchPurchaseFlow(Activity act, String sku, String itemType, int requestCode, OnIabPurchaseFinishedListener listener, String extraData) {
         checkSetupDone("launchPurchaseFlow");
         flagStartAsync("launchPurchaseFlow");
-        if ((itemType.equals("subs")) && (!this.mSubscriptionsSupported)) {
+        if ((itemType.equals(ITEM_TYPE_SUBS)) && (!mSubscriptionsSupported)) {
             IabResult r = new IabResult(-1009, "Subscriptions are not available.");
             if (listener != null) {
                 listener.onIabPurchaseFinished(r, null);
@@ -214,7 +214,7 @@ public class IabHelper {
         }
         try {
             logDebug("Constructing buy intent for " + sku + ", item type: " + itemType);
-            Bundle buyIntentBundle = this.mService.getBuyIntent(3, this.mContext.getPackageName(), sku,
+            Bundle buyIntentBundle = mService.getBuyIntent(3, mContext.getPackageName(), sku,
                 itemType, extraData);
             int response = getResponseCodeFromBundle(buyIntentBundle);
             if (response != 0) {
@@ -228,10 +228,10 @@ public class IabHelper {
                 return;
             }
             PendingIntent pendingIntent = (PendingIntent) buyIntentBundle.getParcelable("BUY_INTENT");
-            this.mRequestCode = requestCode;
-            this.mPurchaseListener = listener;
-            this.mPurchasingItemType = itemType;
-            act.startIntentSenderForResult(pendingIntent.getIntentSender(), this.mRequestCode, new Intent(),
+            mRequestCode = requestCode;
+            mPurchaseListener = listener;
+            mPurchasingItemType = itemType;
+            act.startIntentSenderForResult(pendingIntent.getIntentSender(), mRequestCode, new Intent(),
                 Integer.valueOf(0).intValue(), Integer.valueOf(0).intValue(), Integer.valueOf(0)
                 .intValue());
         } catch (IntentSender.SendIntentException e) {
@@ -256,8 +256,8 @@ public class IabHelper {
     }
 
     public boolean handleActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.i(mDebugTag, "Arrived: " + requestCode + ", " + this.mRequestCode);
-        if (requestCode != this.mRequestCode) {
+        Log.i(mDebugTag, "Arrived: " + requestCode + ", " + mRequestCode);
+        if (requestCode != mRequestCode) {
             return false;
         }
         checkSetupDone("handleActivityResult");
@@ -266,8 +266,8 @@ public class IabHelper {
         if (data == null) {
             logError("Null data in IAB activity result.");
             IabResult result = new IabResult(-1002, "Null data in IAB result");
-            if (this.mPurchaseListener != null) {
-                this.mPurchaseListener.onIabPurchaseFinished(result, null);
+            if (mPurchaseListener != null) {
+                mPurchaseListener.onIabPurchaseFinished(result, null);
             }
             return true;
         }
@@ -279,26 +279,26 @@ public class IabHelper {
             logDebug("Purchase data: " + purchaseData);
             logDebug("Data signature: " + dataSignature);
             logDebug("Extras: " + data.getExtras());
-            logDebug("Expected item type: " + this.mPurchasingItemType);
+            logDebug("Expected item type: " + mPurchasingItemType);
             if ((purchaseData == null) || (dataSignature == null)) {
                 logError("BUG: either purchaseData or dataSignature is null.");
                 logDebug("Extras: " + data.getExtras().toString());
                 IabResult result = new IabResult(-1008, "IAB returned null purchaseData or dataSignature");
-                if (this.mPurchaseListener != null) {
-                    this.mPurchaseListener.onIabPurchaseFinished(result, null);
+                if (mPurchaseListener != null) {
+                    mPurchaseListener.onIabPurchaseFinished(result, null);
                 }
                 return true;
             }
             MdMarketsIAB.Prchase purchase = null;
             try {
-                purchase = new MdMarketsIAB.Prchase(this.mPurchasingItemType, purchaseData, dataSignature);
+                purchase = new MdMarketsIAB.Prchase(mPurchasingItemType, purchaseData, dataSignature);
                 String sku = purchase.getProductId();
-                if (!Security.verifyPurchase(this.mSignatureBase64, purchaseData, dataSignature)) {
+                if (!Security.verifyPurchase(mSignatureBase64, purchaseData, dataSignature)) {
                     logError("Purchase signature verification FAILED for sku " + sku);
                     IabResult result = new IabResult(-1003, "Signature verification failed for Product ID " +
                         sku);
-                    if (this.mPurchaseListener != null) {
-                        this.mPurchaseListener.onIabPurchaseFinished(result, purchase);
+                    if (mPurchaseListener != null) {
+                        mPurchaseListener.onIabPurchaseFinished(result, purchase);
                     }
                     return true;
                 }
@@ -307,31 +307,31 @@ public class IabHelper {
                 logError("Failed to parse purchase data.");
                 e.printStackTrace();
                 IabResult result = new IabResult(-1002, "Failed to parse purchase data.");
-                if (this.mPurchaseListener != null) {
-                    this.mPurchaseListener.onIabPurchaseFinished(result, null);
+                if (mPurchaseListener != null) {
+                    mPurchaseListener.onIabPurchaseFinished(result, null);
                 }
                 return true;
             }
-            if (this.mPurchaseListener != null)
-                this.mPurchaseListener.onIabPurchaseFinished(new IabResult(0, "Success"), purchase);
+            if (mPurchaseListener != null)
+                mPurchaseListener.onIabPurchaseFinished(new IabResult(0, "Success"), purchase);
         } else if (resultCode == -1) {
             logDebug("Result code was OK but in-app billing response was not OK: " +
                 getResponseDesc(responseCode));
-            if (this.mPurchaseListener != null) {
+            if (mPurchaseListener != null) {
                 IabResult result = new IabResult(responseCode, "Problem purchashing item.");
-                this.mPurchaseListener.onIabPurchaseFinished(result, null);
+                mPurchaseListener.onIabPurchaseFinished(result, null);
             }
         } else if (resultCode == 0) {
             logDebug("Purchase canceled - Response: " + getResponseDesc(responseCode));
             IabResult result = new IabResult(-1005, "User canceled.");
-            if (this.mPurchaseListener != null)
-                this.mPurchaseListener.onIabPurchaseFinished(result, null);
+            if (mPurchaseListener != null)
+                mPurchaseListener.onIabPurchaseFinished(result, null);
         } else {
             logError("Purchase failed. Result code: " + Integer.toString(resultCode) + ". Response: " +
                 getResponseDesc(responseCode));
             IabResult result = new IabResult(-1006, "Unknown purchase response.");
-            if (this.mPurchaseListener != null) {
-                this.mPurchaseListener.onIabPurchaseFinished(result, null);
+            if (mPurchaseListener != null) {
+                mPurchaseListener.onIabPurchaseFinished(result, null);
             }
         }
         return true;
@@ -345,23 +345,23 @@ public class IabHelper {
         checkSetupDone("queryInventory");
         try {
             Inventory inv = new Inventory();
-            int r = queryPurchases(inv, "inapp");
+            int r = queryPurchases(inv, ITEM_TYPE_INAPP);
             if (r != 0) {
                 throw new IabException(r, "Error refreshing inventory (querying owned items).");
             }
             if (querySkuDetails) {
-                r = querySkuDetails("inapp", inv, moreItemSkus);
+                r = querySkuDetails(ITEM_TYPE_INAPP, inv, moreItemSkus);
                 if (r != 0) {
                     throw new IabException(r, "Error refreshing inventory (querying prices of items).");
                 }
             }
-            if (this.mSubscriptionsSupported) {
-                r = queryPurchases(inv, "subs");
+            if (mSubscriptionsSupported) {
+                r = queryPurchases(inv, ITEM_TYPE_SUBS);
                 if (r != 0) {
                     throw new IabException(r, "Error refreshing inventory (querying owned subscriptions).");
                 }
                 if (querySkuDetails) {
-                    r = querySkuDetails("subs", inv, moreItemSkus);
+                    r = querySkuDetails(ITEM_TYPE_SUBS, inv, moreItemSkus);
                     if (r != 0) {
                         throw new IabException(r,
                             "Error refreshing inventory (querying prices of subscriptions).");
@@ -376,28 +376,30 @@ public class IabHelper {
         }
     }
 
-    public void queryInventoryAsync(final boolean querySkuDetails, final List < String > moreSkus, final QueryInventoryFinishedListener listener) {
+    public void queryInventoryAsync(final boolean querySkuDetails, final List <String> moreSkus, final QueryInventoryFinishedListener listener) {
         final Handler handler = new Handler();
         checkSetupDone("queryInventory");
         flagStartAsync("refresh inventory");
         new Thread(new Runnable() {
             public void run() {
-                IabResult result = new IabResult(0, "Inventory refresh successful.");
+                IabResult result = new IabResult(BILLING_RESPONSE_RESULT_OK, "Inventory refresh successful.");
                 Inventory inv = null;
                 try {
-                    inv = IabHelper.this.queryInventory(querySkuDetails, moreSkus);
+                    inv = queryInventory(querySkuDetails, moreSkus);
                 } catch (IabException ex) {
                     result = ex.getResult();
                 }
-                IabHelper.this.flagEndAsync();
+                flagEndAsync();
 
                 final IabResult result_f = result;
                 final Inventory inv_f = inv;
-                handler.post(new Runnable() {
-                    public void run() {
-                        listener.onQueryInventoryFinished(result_f, inv_f);
-                    }
-                });
+                if (listener != null) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            listener.onQueryInventoryFinished(result_f, inv_f);
+                        }
+                    });
+                }
             }
         }).start();
     }
@@ -412,7 +414,7 @@ public class IabHelper {
 
     void consume(MdMarketsIAB.Prchase itemInfo) throws IabException {
         checkSetupDone("consume");
-        itemInfo.mItemType.equals("inapp");
+        itemInfo.mItemType.equals(ITEM_TYPE_INAPP);
         try {
             String token = itemInfo.getPurchaseToken();
             String sku = itemInfo.getProductId();
@@ -422,7 +424,7 @@ public class IabHelper {
                     itemInfo);
             }
             logDebug("Consuming sku: " + sku + ", token: " + token);
-            int response = this.mService.consumePurchase(3, this.mContext.getPackageName(), token);
+            int response = mService.consumePurchase(3, mContext.getPackageName(), token);
             if (response == 0) {
                 logDebug("Successfully consumed sku: " + sku);
             } else {
@@ -465,7 +467,7 @@ public class IabHelper {
     }
 
     void checkSetupDone(String operation) {
-        if (!this.mSetupDone) {
+        if (!mSetupDone) {
             logError("Illegal state for operation (" + operation + "): IAB helper is not set up.");
             throw new IllegalStateException("IAB helper is not set up. Can't perform operation: " + operation);
         }
@@ -521,12 +523,12 @@ public class IabHelper {
 
     int queryPurchases(Inventory inv, String itemType) throws JSONException, RemoteException, IabException {
         logDebug("Querying owned items, item type: " + itemType);
-        logDebug("Package name: " + this.mContext.getPackageName());
+        logDebug("Package name: " + mContext.getPackageName());
         boolean verificationFailed = false;
         String continueToken = null;
         do {
             logDebug("Calling getPurchases with continuation token: " + continueToken);
-            Bundle ownedItems = this.mService.getPurchases(3, this.mContext.getPackageName(), itemType,
+            Bundle ownedItems = mService.getPurchases(3, mContext.getPackageName(), itemType,
                 continueToken);
 
             int response = getResponseCodeFromBundle(ownedItems);
@@ -548,7 +550,7 @@ public class IabHelper {
                 String purchaseData = (String) purchaseDataList.get(i);
                 String signature = (String) signatureList.get(i);
                 String sku = (String) ownedSkus.get(i);
-                if (Security.verifyPurchase(this.mSignatureBase64, purchaseData, signature)) {
+                if (Security.verifyPurchase(mSignatureBase64, purchaseData, signature)) {
                     logDebug("Sku is owned: " + sku);
                     MdMarketsIAB.Prchase purchase = new MdMarketsIAB.Prchase(itemType, purchaseData,
                         signature);
@@ -561,7 +563,7 @@ public class IabHelper {
                     logWarn("Purchase signature verification **FAILED**. Not adding item.");
                     logDebug("   Purchase data: " + purchaseData);
                     logDebug("   Signature: " + signature);
-                    if (itemType.equals("inapp")) {
+                    if (itemType.equals(ITEM_TYPE_INAPP)) {
                         MdMarketsIAB.Prchase purchase = new MdMarketsIAB.Prchase(itemType,
                             purchaseData, signature);
                         consume(purchase);
@@ -592,7 +594,7 @@ public class IabHelper {
         }
         Bundle querySkus = new Bundle();
         querySkus.putStringArrayList("ITEM_ID_LIST", skuList);
-        Bundle skuDetails = this.mService.getSkuDetails(3, this.mContext.getPackageName(), itemType,
+        Bundle skuDetails = mService.getSkuDetails(3, mContext.getPackageName(), itemType,
             querySkus);
         if (!skuDetails.containsKey("DETAILS_LIST")) {
             int response = getResponseCodeFromBundle(skuDetails);
@@ -622,14 +624,14 @@ public class IabHelper {
                 final List < IabResult > results = new ArrayList < IabResult > ();
                 for (MdMarketsIAB.Prchase purchase: purchases) {
                     try {
-                        IabHelper.this.consume(purchase);
+                        consume(purchase);
                         results.add(new IabResult(0, "Successful consume of Product Id " +
                             purchase.getProductId()));
                     } catch (IabException ex) {
                         results.add(ex.getResult());
                     }
                 }
-                IabHelper.this.flagEndAsync();
+                flagEndAsync();
                 if (singleListener != null) {
                     handler.post(new Runnable() {
                         public void run() {
@@ -649,17 +651,17 @@ public class IabHelper {
     }
 
     void logDebug(String msg) {
-        if (this.mDebugLog)
+        if (mDebugLog)
             LOG.i(mDebugTag, msg);
     }
 
     void logError(String msg) {
-        if (this.mDebugLog)
+        if (mDebugLog)
             Log.e(mDebugTag, msg);
     }
 
     void logWarn(String msg) {
-        if (this.mDebugLog)
+        if (mDebugLog)
             Log.i(mDebugTag, msg);
     }
 

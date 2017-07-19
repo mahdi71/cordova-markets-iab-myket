@@ -73,14 +73,21 @@ public class MdMarketsIAB extends CordovaPlugin {
     }
     
     public void Initialize(String PublicKey, int Market, final CallbackContext callbackContext) {
-        helper = new IabHelper(cordova.getActivity(), PublicKey, Market);
-        mInventory = new Inventory();
+        helper = new IabHelper(cordova.getActivity().getApplicationContext(), PublicKey, Market);
         helper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
             public void onIabSetupFinished(IabResult result) {
-                JSONArray jo = new JSONArray();
-                jo.put(result.isSuccess());
-                jo.put(result.getMessage() == null ? "" : result.getMessage());
-                callbackContext.success(jo);
+                if (result.isFailure()) {
+                    callbackContext.error(result.getMessage());
+                    return;
+                }
+                JSONObject Result = new JSONObject();
+                try {
+                    Result.put("success", result.isSuccess());
+                    Result.put("message", result.getMessage() == null ? "" : result.getMessage());
+                } catch (JSONException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+                callbackContext.success(Result);
             }
         });
     }
@@ -93,13 +100,33 @@ public class MdMarketsIAB extends CordovaPlugin {
         return helper.subscriptionsSupported();
     }
 
+    private Boolean hasErrorsAndUpdateInventory(IabResult result, Inventory inventory, CallbackContext callbackContext) {
+        if (result.isFailure()) {
+            callbackContext.error("Failed to query inventory: " + result);
+            return true;
+        }
+
+        // Have we been disposed of in the meantime? If so, quit.
+        if (helper == null) {
+            callbackContext.error("The billing helper has been disposed");
+            return true;
+        }
+
+        // Update the inventory
+        mInventory = inventory;
+
+        return false;
+    }
+
     public void GetOwnedProducts(final CallbackContext callbackContext) {
-        IabHelper.QueryInventoryFinishedListener lis = new IabHelper.QueryInventoryFinishedListener() {
-            public void onQueryInventoryFinished(IabResult result, Inventory inv) {
+        IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+            public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+                if (hasErrorsAndUpdateInventory(result, inventory, callbackContext)) return;
+                Log.e(TAG, "Query inventory was successful.");
                 Map<String, MdMarketsIAB.Prchase> map = new HashMap<String, MdMarketsIAB.Prchase>();
-                if ((inv != null) && (inv.mPurchaseMap != null)) {
-                    mInventory = inv;
-                    map.putAll(inv.mPurchaseMap);
+                if ((inventory != null) && (inventory.mPurchaseMap != null)) {
+                    mInventory = inventory;
+                    map.putAll(mInventory.mPurchaseMap);
                 }
                 for(Map.Entry<String, MdMarketsIAB.Prchase> entry : map.entrySet()) {
                     Prchase Product = entry.getValue();
@@ -109,13 +136,13 @@ public class MdMarketsIAB extends CordovaPlugin {
                 }
                 JSONObject purchaseResult = new JSONObject();
                 try {
-                    purchaseResult.put("data", map);
+                    purchaseResult.put("data", inventory.mPurchaseMap);
                     purchaseResult.put("result", result.isSuccess());
                     callbackContext.success(purchaseResult);
                 } catch (JSONException e) {Log.e(TAG, "Purchase.");}
             }
         };
-        helper.queryInventoryAsync(lis);
+        helper.queryInventoryAsync(mGotInventoryListener);
     }
 
     public void RequestPayment(final String ProductId, final String ProductType, final String DeveloperPayload, final CallbackContext callbackContext) {
