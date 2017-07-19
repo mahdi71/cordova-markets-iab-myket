@@ -1,5 +1,43 @@
-package ir.miladesign.utils;
+// Portions copyright 2002, Google, Inc.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
+package md.markets;
+
+// This code was converted from code at http://iharder.sourceforge.net/base64/
+// Lots of extraneous features were removed.
+/* The original code said:
+ * <p>
+ * I am placing this code in the Public Domain. Do with it as you will.
+ * This software comes with no guarantees or warranties but with
+ * plenty of well-wishing instead!
+ * Please visit
+ * <a href="http://iharder.net/xmlizable">http://iharder.net/xmlizable</a>
+ * periodically to check for updates or to contribute improvements.
+ * </p>
+ *
+ * @author Robert Harder
+ * @author rharder@usa.net
+ * @version 1.3
+ */
+
+/**
+ * Base64 converter class. This code is not a complete MIME encoder;
+ * it simply converts binary data to base64 data and back.
+ *
+ * <p>Note {@link CharBase64} is a GWT-compatible implementation of this
+ * class.
+ */
 public class Base64 {
     /** Specify encoding (value is {@code true}). */
     public final static boolean ENCODE = true;

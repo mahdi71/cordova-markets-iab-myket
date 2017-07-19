@@ -22,8 +22,8 @@
 	<!-- android -->
 	<platform name="android">
 		<config-file target="res/xml/config.xml" parent="/*">
-			<feature name="MdMarketsIAB">
-				<param name="android-package" value="ir.miladesign.MdMarketsIAB"/>
+			<feature name="MdMarkets">
+				<param name="android-package" value="md.markets.MdMarkets"/>
 			</feature>
 		</config-file>
 		<config-file target="AndroidManifest.xml" parent="/*">
@@ -32,15 +32,16 @@
 		</config-file>
 
 		<source-file src="src/IInAppBillingService.aidl" target-dir="src/com/android/vending/billing" />
-        <source-file src="src/MdMarketsIAB.java" target-dir="src/ir/miladesign" />
-        <source-file src="src/utils/Base64.java" target-dir="src/ir/miladesign/utils" />
-        <source-file src="src/utils/Base64DecoderException.java" target-dir="src/ir/miladesign/utils" />
-        <source-file src="src/utils/IabException.java" target-dir="src/ir/miladesign/utils" />
-        <source-file src="src/utils/IabHelper.java" target-dir="src/ir/miladesign/utils" />
-        <source-file src="src/utils/IabResult.java" target-dir="src/ir/miladesign/utils" />
-        <source-file src="src/utils/Inventory.java" target-dir="src/ir/miladesign/utils" />
-        <source-file src="src/utils/Security.java" target-dir="src/ir/miladesign/utils" />
-        <source-file src="src/utils/SkDetails.java" target-dir="src/ir/miladesign/utils" />
+        <source-file src="src/MdMarkets.java" target-dir="src/md/markets" />
+        <source-file src="src/Base64.java" target-dir="src/md/markets" />
+        <source-file src="src/Base64DecoderException.java" target-dir="src/md/markets" />
+        <source-file src="src/IabException.java" target-dir="src/md/markets" />
+        <source-file src="src/IabHelper.java" target-dir="src/md/markets" />
+        <source-file src="src/IabResult.java" target-dir="src/md/markets" />
+        <source-file src="src/Inventory.java" target-dir="src/md/markets" />
+        <source-file src="src/Security.java" target-dir="src/md/markets" />
+        <source-file src="src/SkuDetails.java" target-dir="src/md/markets" />
+        <source-file src="src/Purchase.java" target-dir="src/md/markets" />
 	</platform>
 	
 </plugin>

@@ -13,11 +13,10 @@
  * limitations under the License.
  */
 
-package ir.miladesign.utils;
+package md.markets;
 
 import android.text.TextUtils;
 import android.util.Log;
-
 
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
@@ -28,6 +27,15 @@ import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
+/**
+ * Security-related methods. For a secure implementation, all of this code
+ * should be implemented on a server that communicates with the
+ * application on the device. For the sake of simplicity and clarity of this
+ * example, this code is included here and is executed on the device. If you
+ * must verify the purchases on the phone, you should obfuscate this code to
+ * make it harder for an attacker to replace the code with stubs that treat all
+ * purchases as verified.
+ */
 public class Security {
     private static final String TAG = "IABUtil/Security";
 

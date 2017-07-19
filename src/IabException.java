@@ -13,14 +13,17 @@
  * limitations under the License.
  */
 
-package ir.miladesign.utils;
+package md.markets;
 
+/**
+ * Exception thrown when something went wrong with in-app billing.
+ * An IabException has an associated IabResult (an error).
+ * To get the IAB result that caused this exception to be thrown,
+ * call {@link #getResult()}.
+ */
+@SuppressWarnings("serial")
 public class IabException extends Exception {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	IabResult mResult;
+    IabResult mResult;
 
     public IabException(IabResult r) {
         this(r, null);

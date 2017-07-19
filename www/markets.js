@@ -1,6 +1,22 @@
 module.exports = {
     Initialize: function(PublicKey, Market) {
-		console.log("Initialize: " + PublicKey + " .Market: " + Market);
+		console.log("Initialize: " + PublicKey + ". Market: " + Market);
+        cordova.exec(
+			function (result) {
+				console.log(result);
+				alert(result);
+			},
+			function (error) {
+				console.log(error);
+				alert(JSON.stringify(error));
+			},
+            'MdMarkets',
+            'Initialize',
+            [PublicKey, Market]
+        ); 
+    },
+    GetSkuDetails: function(ProductIds) {
+		console.log("GetSkuDetails");
         cordova.exec(
 			function (result) {
 				console.log(result);
@@ -8,11 +24,27 @@ module.exports = {
 			},
 			function (error) {
 				console.log(error);
-				alert(error);
+				alert(JSON.stringify(error));
 			},
-            'MdMarketsIAB',
-            'Initialize',
-            [PublicKey, Market]
+            'MdMarkets',
+            'GetSkuDetails',
+            [ProductIds]
+        ); 
+    },
+    RequestPayment: function(ProductId, Subscribe) {
+		console.log("RequestPayment: " + ProductId);
+        cordova.exec(
+			function (result) {
+				console.log(result);
+				alert(JSON.stringify(result));
+			},
+			function (error) {
+				console.log(error);
+				alert(JSON.stringify(error));
+			},
+            'MdMarkets',
+            'RequestPayment',
+            [ProductId, Subscribe]
         ); 
     },
     GetOwnedProducts: function() {
@@ -24,43 +56,11 @@ module.exports = {
 			},
 			function (error) {
 				console.log(error);
-				alert(error);
+				alert(JSON.stringify(error));
 			},
-            'MdMarketsIAB',
+            'MdMarkets',
             'GetOwnedProducts',
             []
-        ); 
-    },
-    RequestPayment: function(ProductId, ProductType, DeveloperPayload) {
-		console.log("RequestPayment: " + ProductId + " .ProductType: " + ProductType);
-        cordova.exec(
-			function (result) {
-				console.log(result);
-				alert(JSON.stringify(result));
-			},
-			function (error) {
-				console.log(error);
-				alert(error);
-			},
-            'MdMarketsIAB',
-            'RequestPayment',
-            [ProductId, ProductType, DeveloperPayload]
-        ); 
-    },
-    ConsumeProduct: function(ProductId) {
-		console.log("ConsumeProduct: " + ProductId);
-        cordova.exec(
-			function (result) {
-				console.log(result);
-				alert(JSON.stringify(result));
-			},
-			function (error) {
-				console.log(error);
-				alert(error);
-			},
-            'MdMarketsIAB',
-            'ConsumeProduct',
-            [ProductId]
         ); 
     }
 };

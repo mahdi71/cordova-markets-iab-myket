@@ -12,8 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package ir.miladesign.utils;
+package md.markets;
 
+/**
+ * Exception thrown when encountering an invalid Base64 input character.
+ *
+ * @author nelson
+ */
 public class Base64DecoderException extends Exception {
     public Base64DecoderException() {
         super();
