@@ -3,8 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     id="cordova-markets-iab"
     version="1.0.0">
-    <name>Cordova Markets IAB</name>
-    <description>Cordova Markets IAB</description>
+    <name>Cordova Markets IAB Plugin</name>
+    <description>All Persian Markets IAB for Cordova</description>
     <author>Milad Mohammadi</author>	
     <license>miladesign.ir</license>
     <keywords>cordova,plugin,iap,markets,iab</keywords>
@@ -28,8 +28,9 @@
 		</config-file>
 		<config-file target="AndroidManifest.xml" parent="/*">
 			<uses-permission android:name="android.permission.INTERNET" />
-			<uses-permission android:name="com.farsitel.bazaar.permission.PAY_THROUGH_BAZAAR" />
+			<uses-permission android:name="$PERMISSION" />
 		</config-file>
+		<preference name="PERMISSION" default="com.hrm.android.market.permission.PAY_THROUGH_MARKET" />
 
 		<source-file src="src/IInAppBillingService.aidl" target-dir="src/com/android/vending/billing" />
         <source-file src="src/MdMarkets.java" target-dir="src/md/markets" />
@@ -43,5 +44,4 @@
         <source-file src="src/SkuDetails.java" target-dir="src/md/markets" />
         <source-file src="src/Purchase.java" target-dir="src/md/markets" />
 	</platform>
-	
 </plugin>

@@ -1,66 +1,18 @@
 module.exports = {
-    Initialize: function(PublicKey, Market) {
-		console.log("Initialize: " + PublicKey + ". Market: " + Market);
-        cordova.exec(
-			function (result) {
-				console.log(result);
-				alert(result);
-			},
-			function (error) {
-				console.log(error);
-				alert(JSON.stringify(error));
-			},
-            'MdMarkets',
-            'Initialize',
-            [PublicKey, Market]
-        ); 
+    Initialize: function(PublicKey, Market, Success, Failed) {
+		console.log("Initialize Plugin");
+        cordova.exec(Success, Failed, 'MdMarkets', 'Initialize', [PublicKey, Market]); 
     },
-    GetSkuDetails: function(ProductIds) {
-		console.log("GetSkuDetails");
-        cordova.exec(
-			function (result) {
-				console.log(result);
-				alert(JSON.stringify(result));
-			},
-			function (error) {
-				console.log(error);
-				alert(JSON.stringify(error));
-			},
-            'MdMarkets',
-            'GetSkuDetails',
-            [ProductIds]
-        ); 
+    GetSkuDetails: function(ProductIds, Success, Failed) {
+		console.log("Get Sku Details");
+        cordova.exec(Success, Failed, 'MdMarkets', 'GetSkuDetails', [ProductIds]);
     },
-    RequestPayment: function(ProductId, Subscribe) {
-		console.log("RequestPayment: " + ProductId);
-        cordova.exec(
-			function (result) {
-				console.log(result);
-				alert(JSON.stringify(result));
-			},
-			function (error) {
-				console.log(error);
-				alert(JSON.stringify(error));
-			},
-            'MdMarkets',
-            'RequestPayment',
-            [ProductId, Subscribe]
-        ); 
+    RequestPayment: function(ProductId, Subscribe, Success, Failed) {
+		console.log("Request Payment: " + ProductId);
+        cordova.exec(Success, Failed, 'MdMarkets', 'RequestPayment', [ProductId, Subscribe]);
     },
-    GetOwnedProducts: function() {
-		console.log("GetOwnedProducts");
-        cordova.exec(
-			function (result) {
-				console.log(result);
-				alert(JSON.stringify(result));
-			},
-			function (error) {
-				console.log(error);
-				alert(JSON.stringify(error));
-			},
-            'MdMarkets',
-            'GetOwnedProducts',
-            []
-        ); 
+    GetOwnedProducts: function(Success, Failed) {
+		console.log("Get Owned Products");
+        cordova.exec(Success, Failed, 'MdMarkets', 'GetOwnedProducts', []);
     }
 };
